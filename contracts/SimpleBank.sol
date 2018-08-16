@@ -31,26 +31,22 @@ contract SimpleBank {
     /// @notice Enroll a customer with the bank
     /// @return The users enrolled status
     // Log the appropriate event
-    /// @dev You can only enroll yourself
-    function enroll(address _newCustomer) public returns (bool){
-        if (_newCustomer = msg.sender) {
-          enrolled(_newCustomer) = true;
-          emit LogEnrolled(_newCustomer);
-          return true;
-        }
+    function enroll() public returns (bool){
+        enrolled(msg.sender) = true;
+        emit LogEnrolled(msg.sender);
+        return true;
     }
 
     /// @notice Deposit ether into bank
     /// @return The balance of the user after the deposit is made
     // Add the appropriate keyword so that this function can receive ether
-    /// @dev Note that any user can deposit money to anyone's account as long as the receiver is enrolled
-    function deposit(_address) public payable returns (uint) {
+    function deposit() public payable returns (uint) {
         /* Add the amount to the user's balance, call the event associated with a deposit,
           then return the balance of the user */
-        if (enrolled(_address) = true) {
-          balances(_address) = balances(_address) + msg.value;
-          emit LogDepositMade(_address, msg.value);
-          return balances(_address);
+        if (enrolled(msg.sender) == true) {
+          balances(msg.sender) = balances(msg.sender) + msg.value;
+          emit LogDepositMade(msg.sender, msg.value);
+          return balances(msg.sender);
         }
     }
 
@@ -63,6 +59,12 @@ contract SimpleBank {
            Subtract the amount from the sender's balance, and try to send that amount of ether
            to the user attempting to withdraw. IF the send fails, add the amount back to the user's balance
            return the user's balance.*/
+        if (enrolled(msg.sender) == true && balances(msg.sender) >= withdrawAmount) {
+          msg.sender.send(withdrawAmount);
+          balances(msg.sender) = balances(msg.sender) - withdrawAmount;
+          emit LogWithdrawal(msg.sender, withdrawAmount, balances(msg.sender));
+          return balances(msg.sender);
+        }
     }
 
     /// @notice Get balance
