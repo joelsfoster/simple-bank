@@ -2,24 +2,25 @@ pragma solidity ^0.4.13;
 contract SimpleBank {
 
     /* Fill in the keyword. Hint: We want to protect our users balance from other contracts*/
-    mapping (address => uint) balances;
-    
+    mapping (address => uint) internal balances;
+
     /* Fill in the keyword. We want to create a getter function and allow contracts to be able to see if a user is enrolled.  */
-    mapping (address => bool) enrolled;
+    mapping (address => bool) public enrolled;
 
     /* Let's make sure everyone knows who owns the bank. Use the appropriate keyword for this*/
-    address owner;
+    address public owner;
 
     // Events - publicize actions to external listeners
-    
+
     /* Add an argument for this event, an accountAddress */
-    event LogEnrolled();
+    event LogEnrolled(address accountAddress);
 
     /* Add 2 arguments for this event, an accountAddress and an amount */
-    event LogDepositMade();
+    event LogDepositMade(address accountAddress, uint amount);
 
     /* Create an event called LogWithdrawal */
     /* Add 3 arguments for this event, an accountAddress, withdrawAmount and a newBalance */
+    event LogWithdrawal(address accountAddress, uint withdrawAmount, uint newBalance);
 
     // Constructor, can receive one or many variables here; only one allowed
     constructor() {
