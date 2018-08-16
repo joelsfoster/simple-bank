@@ -40,9 +40,15 @@ contract SimpleBank {
     /// @notice Deposit ether into bank
     /// @return The balance of the user after the deposit is made
     // Add the appropriate keyword so that this function can receive ether
-    function deposit() public returns (uint) {
+    /// @dev Note that any user can deposit money to anyone's account as long as the receiver is enrolled
+    function deposit(_address) public payable returns (uint) {
         /* Add the amount to the user's balance, call the event associated with a deposit,
           then return the balance of the user */
+        if (enrolled(_address) = true) {
+          balances(_address) = balances(_address) + msg.value;
+          emit LogDepositMade(_address, msg.value);
+          return balances(_address);
+        }
     }
 
     /// @notice Withdraw ether from bank
