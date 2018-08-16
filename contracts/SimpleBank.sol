@@ -31,10 +31,13 @@ contract SimpleBank {
     /// @notice Enroll a customer with the bank
     /// @return The users enrolled status
     // Log the appropriate event
+    /// @dev You can only enroll yourself
     function enroll(address _newCustomer) public returns (bool){
-      enrolled(_newCustomer) = true;
-      emit LogEnrolled(_newCustomer);
-      return true;
+        if (_newCustomer = msg.sender) {
+          enrolled(_newCustomer) = true;
+          emit LogEnrolled(_newCustomer);
+          return true;
+        }
     }
 
     /// @notice Deposit ether into bank
