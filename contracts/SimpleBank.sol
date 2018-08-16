@@ -32,7 +32,7 @@ contract SimpleBank {
     /// @return The users enrolled status
     // Log the appropriate event
     function enroll() public returns (bool){
-        enrolled(msg.sender) = true;
+        enrolled[msg.sender] = true;
         emit LogEnrolled(msg.sender);
         return true;
     }
@@ -43,10 +43,10 @@ contract SimpleBank {
     function deposit() public payable returns (uint) {
         /* Add the amount to the user's balance, call the event associated with a deposit,
           then return the balance of the user */
-        if (enrolled(msg.sender) == true) {
-          balances(msg.sender) = balances(msg.sender) + msg.value;
+        if (enrolled[msg.sender] == true) {
+          balances[msg.sender] = balances[msg.sender] + msg.value;
           emit LogDepositMade(msg.sender, msg.value);
-          return balances(msg.sender);
+          return balances[msg.sender];
         }
     }
 
@@ -59,11 +59,11 @@ contract SimpleBank {
            Subtract the amount from the sender's balance, and try to send that amount of ether
            to the user attempting to withdraw. IF the send fails, add the amount back to the user's balance
            return the user's balance.*/
-        if (enrolled(msg.sender) == true && balances(msg.sender) >= withdrawAmount) {
-          msg.sender.send(withdrawAmount);
-          balances(msg.sender) = balances(msg.sender) - withdrawAmount;
-          emit LogWithdrawal(msg.sender, withdrawAmount, balances(msg.sender));
-          return balances(msg.sender);
+        if (enrolled[msg.sender] == true && balances[msg.sender] >= withdrawAmount) {
+          msg.sender.transfer(withdrawAmount);
+          balances[msg.sender] = balances[msg.sender] - withdrawAmount;
+          emit LogWithdrawal(msg.sender, withdrawAmount, balances[msg.sender]);
+          return balances[msg.sender];
         }
     }
 
@@ -73,7 +73,7 @@ contract SimpleBank {
     // allows function to run locally/off blockchain
     function balance() public view returns (uint) {
         /* Get the balance of the sender of this transaction */
-        return balances(msg.sender);
+        return balances[msg.sender];
     }
 
     // Fallback function - Called if other functions don't match call or
