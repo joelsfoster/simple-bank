@@ -25,16 +25,12 @@ contract SimpleBank {
     // Constructor, can receive one or many variables here; only one allowed
     constructor() {
         /* Set the owner to the creator of this contract */
-        owner = msg.sender;
     }
 
     /// @notice Enroll a customer with the bank
     /// @return The users enrolled status
     // Log the appropriate event
-    function enroll(address _newCustomer) public returns (bool){
-      enrolled(_newCustomer) = true;
-      emit LogEnrolled(_newCustomer);
-      return true;
+    function enroll() public returns (bool){
     }
 
     /// @notice Deposit ether into bank
